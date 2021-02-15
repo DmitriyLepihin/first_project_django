@@ -70,7 +70,6 @@ def get_data_page(html):
 
 
 def save_result(items):
-    g = 0
     for info in items:
         match_res = MatchResults(type_sport='Basketball',
                                  league='NBA',
@@ -80,8 +79,7 @@ def save_result(items):
                                  score_one=info['score_team_one'],
                                  score_two=info['score_team_two'],
                                  ).save()
-        g += 1
-        print(f'done {g}')
+
 
 
 def parse():
