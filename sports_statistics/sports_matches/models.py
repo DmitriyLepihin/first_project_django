@@ -9,7 +9,6 @@ class MatchResults(models.Model):
     score_one = models.IntegerField()
     score_two = models.IntegerField()
     date_match = models.DateField(null=True, blank=True)
-    date_match = models.DateField()
     match_details = models.JSONField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
