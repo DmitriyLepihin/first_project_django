@@ -76,23 +76,21 @@ class Command(BaseCommand):
             data = info.find_all()
             if len(data) > 1:
                 date = self.check_data(data, 0)
+                team_one = self.check_data(data, 3)
+                team_two = self.check_data(data, 6)
+                score_team_one = 0
+                score_team_two = 0
                 if date >= DATE_NOW:
                     break
                 if START_SEASON_83 <= date <= FINISH_SEASON_83 or date > DATE_CHANGES or START_SEASONS_85_86 <= \
                         date <= FINISH_SEASON_86_87 or START_SEASON_76 <= date <= FINISH_SEASON_76:
-                    team_one = self.check_data(data, 3)
                     score_team_one = int(self.check_data(data, 5))
-                    team_two = self.check_data(data, 6)
                     score_team_two = int(self.check_data(data, 8))
-                    matches.append({'date_match': date, 'team_one': team_one, 'score_team_one': score_team_one,
-                                    'score_team_two': score_team_two, 'team_two': team_two})
                 elif date < DATE_CHANGES:
-                    team_one = self.check_data(data, 3)
                     score_team_one = int(self.check_data(data, 4))
-                    team_two = self.check_data(data, 6)
                     score_team_two = int(self.check_data(data, 7))
-                    matches.append({'date_match': date, 'team_one': team_one, 'score_team_one': score_team_one,
-                                    'score_team_two': score_team_two, 'team_two': team_two})
+                matches.append({'date_match': date, 'team_one': team_one, 'score_team_one': score_team_one,
+                                'score_team_two': score_team_two, 'team_two': team_two})
             else:
                 continue
         return matches
@@ -148,16 +146,12 @@ class Command(BaseCommand):
                         if info['score_team_one'] > info['score_team_two']:
                             match_stat[0].win_team_two += 1
                             match_stat[0].win_team_two_home += 1
-                            all_match = match_stat[0].win_team_two + match_stat[0].win_team_one
-                            match_stat[0].win_percent_team_one = match_stat[0].win_team_one / all_match * 100
-                            match_stat[0].win_percent_team_two = match_stat[0].win_team_two / all_match * 100
+                            self.calculation_win_percent(match_stat[0])
                             match_stat.save()
                         else:
                             match_stat[0].win_team_one += 1
                             match_stat[0].win_team_one_guest += 1
-                            all_match = match_stat[0].win_team_two + match_stat[0].win_team_one
-                            match_stat[0].win_percent_team_one = match_stat[0].win_team_one / all_match * 100
-                            match_stat[0].win_percent_team_two = match_stat[0].win_team_two / all_match * 100
+                            self.calculation_win_percent(match_stat[0])
                             match_stat.save()
                     else:
                         if info['score_team_one'] > info['score_team_two']:
@@ -172,16 +166,12 @@ class Command(BaseCommand):
                         if info['score_team_one'] > info['score_team_two']:
                             match_stat[0].win_team_one += 1
                             match_stat[0].win_team_one_home += 1
-                            all_match = match_stat[0].win_team_two + match_stat[0].win_team_one
-                            match_stat[0].win_percent_team_one = match_stat[0].win_team_one / all_match * 100
-                            match_stat[0].win_percent_team_two = match_stat[0].win_team_two / all_match * 100
+                            self.calculation_win_percent(match_stat[0])
                             match_stat.save()
                         else:
                             match_stat[0].win_team_two += 1
                             match_stat[0].win_team_two_guest += 1
-                            all_match = match_stat[0].win_team_two + match_stat[0].win_team_one
-                            match_stat[0].win_percent_team_one = match_stat[0].win_team_one / all_match * 100
-                            match_stat[0].win_percent_team_two = match_stat[0].win_team_two / all_match * 100
+                            self.calculation_win_percent(match_stat[0])
                             match_stat.save()
                     else:
                         if info['score_team_one'] > info['score_team_two']:
@@ -192,6 +182,13 @@ class Command(BaseCommand):
                                                             win_team_two=1, win_team_two_guest=1).save()
             else:
                 continue
+
+    def calculation_win_percent(self, match):
+        all_match = match.win_team_two + match.win_team_one
+        match.win_percent_team_one = match.win_team_one / all_match * 100
+        match.win_percent_team_two = match.win_team_two / all_match * 100
+        match.save()
+
 
     def parse(self):
         for i in range(YEAR_START, YEAR_FINISH):
