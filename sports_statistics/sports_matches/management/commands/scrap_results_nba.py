@@ -27,6 +27,8 @@ YEAR_FINISH = 2022
 
 URL_BR = 'https://www.basketball-reference.com/leagues/NBA_'
 
+URL_BASKET_REF = 'https://www.basketball-reference.com'
+
 
 class Command(BaseCommand):
     help = 'Added 80/81 NBA season results to database + updated latest results. Counting victories in personal\
@@ -61,7 +63,7 @@ class Command(BaseCommand):
             for a in div:
                 try:
                     a.find('a').get('href')
-                    link = 'https://www.basketball-reference.com' + a.find('a').get('href')
+                    link = URL_BASKET_REF + a.find('a').get('href')
                     links.append(link)
                 except Exception:
                     continue
@@ -142,16 +144,16 @@ class Command(BaseCommand):
                 sort_teams = sorted(teams)
                 if sort_teams[0] != teams[0]:
                     if StatsWinAllTeamNBA.objects.filter(team_one=sort_teams[0], team_two=sort_teams[1]).exists():
-                        match_stat = StatsWinAllTeamNBA.objects.filter(team_one=sort_teams[0], team_two=sort_teams[1])
+                        match_stat = StatsWinAllTeamNBA.objects.get(team_one=sort_teams[0], team_two=sort_teams[1])
                         if info['score_team_one'] > info['score_team_two']:
-                            match_stat[0].win_team_two += 1
-                            match_stat[0].win_team_two_home += 1
-                            self.calculation_win_percent(match_stat[0])
+                            match_stat.win_team_two += 1
+                            match_stat.win_team_two_home += 1
                             match_stat.save()
+                            self.calculation_win_percent(match_stat)
                         else:
-                            match_stat[0].win_team_one += 1
-                            match_stat[0].win_team_one_guest += 1
-                            self.calculation_win_percent(match_stat[0])
+                            match_stat.win_team_one += 1
+                            match_stat.win_team_one_guest += 1
+                            self.calculation_win_percent(match_stat)
                             match_stat.save()
                     else:
                         if info['score_team_one'] > info['score_team_two']:
@@ -162,17 +164,17 @@ class Command(BaseCommand):
                                                             win_team_one=1, win_team_one_guest=1).save()
                 else:
                     if StatsWinAllTeamNBA.objects.filter(team_one=sort_teams[0], team_two=sort_teams[1]).exists():
-                        match_stat = StatsWinAllTeamNBA.objects.filter(team_one=sort_teams[0], team_two=sort_teams[1])
+                        match_stat = StatsWinAllTeamNBA.objects.get(team_one=sort_teams[0], team_two=sort_teams[1])
                         if info['score_team_one'] > info['score_team_two']:
-                            match_stat[0].win_team_one += 1
-                            match_stat[0].win_team_one_home += 1
-                            self.calculation_win_percent(match_stat[0])
+                            match_stat.win_team_one += 1
+                            match_stat.win_team_one_home += 1
                             match_stat.save()
+                            self.calculation_win_percent(match_stat)
                         else:
-                            match_stat[0].win_team_two += 1
-                            match_stat[0].win_team_two_guest += 1
-                            self.calculation_win_percent(match_stat[0])
+                            match_stat.win_team_two += 1
+                            match_stat.win_team_two_guest += 1
                             match_stat.save()
+                            self.calculation_win_percent(match_stat)
                     else:
                         if info['score_team_one'] > info['score_team_two']:
                             match_stat = StatsWinAllTeamNBA(team_one=info['team_one'], team_two=info['team_two'],
@@ -188,7 +190,6 @@ class Command(BaseCommand):
         match.win_percent_team_one = match.win_team_one / all_match * 100
         match.win_percent_team_two = match.win_team_two / all_match * 100
         match.save()
-
 
     def parse(self):
         for i in range(YEAR_START, YEAR_FINISH):
