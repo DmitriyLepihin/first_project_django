@@ -1,3 +1,4 @@
 venv/
 .idea/
 sports_statistics/config.json
+sports_statistics/sports_matches/telegram/token.json
