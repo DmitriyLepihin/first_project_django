@@ -15,17 +15,21 @@ TEAM_NBA = [
 ]
 
 MSG_GREETING = 'Добро пожаловать в чат-бот который\n\
-покажет статистику личных встреч команд NBA 🏀\n\n⬇‍Выбери две команды в меню⬇'
+покажет статистику личных встреч команд NBA ??\n\n??Выбери две команды в меню?'
 
 URL_BR = 'https://www.basketball-reference.com'
 
-MSG_URL = 'Еще больше информации о баскетболе можно получить перейдя по ссылке ⬇'
+MSG_URL = 'Еще больше информации о баскетболе можно получить перейдя по ссылке ?'
 
 MSG_ALL_GAMES = 'Всего проведено:'
 
 MSG_WIN = 'побед:'
 
 MSG_PERCENT_WIN = 'процент побед:'
+
+MSG_WIN_HOME = 'побед дома:'
+
+MSG_WIN_GUEST = 'побед в гостях:'
 
 teams = []
 
@@ -57,10 +61,13 @@ def callback_walker(call):
         sort_teams = sorted(teams)
         req = requests.get(f'http://127.0.0.1:8000/api/all_teams_matches/?team1={sort_teams[0]}&team2={sort_teams[1]}')
         res = json.loads(req.text)
+        print(res)
         all_match = res['win_team_one'] + res['win_team_two']
         result = f"{MSG_ALL_GAMES} {all_match} игр\n\n{res['team_one']} {MSG_WIN} {res['win_team_one']}\n\
-{MSG_PERCENT_WIN} {int(res['percent_win_team_one'])}%\n\n{res['team_two']} {MSG_WIN} {res['win_team_two']}\n\
-{MSG_PERCENT_WIN} {int(res['percent_win_team_two'])}%"
+{MSG_WIN_GUEST} {res['win_team_one_guest']}\n{MSG_WIN_HOME} {res['win_team_one_home']}\n{MSG_PERCENT_WIN}\
+ {int(res['win_percent_team_one'])}%\n\n{res['team_two']} {MSG_WIN} {res['win_team_two']}\n\
+{MSG_WIN_GUEST} {res['win_team_two_guest']}\n{MSG_WIN_HOME} {res['win_team_two_home']}\n\
+{MSG_PERCENT_WIN} {int(res['win_percent_team_two'])}%"
         teams = []
         bot.send_message(call.message.chat.id, result)
 

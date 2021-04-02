@@ -30,3 +30,10 @@ class StatsWinAllTeamNBA(models.Model):
 
     def __str__(self):
         return f"{self.team_one} - WIN {self.win_team_one} : {self.win_team_two} WIN - {self.team_two}"
+
+
+class TeamsNBA(models.Model):
+    team_name = models.CharField(max_length=350, blank=False, null=False)
+
+    def __str__(self):
+        return f"{self.team_name}"
