@@ -34,7 +34,7 @@ font-family: inherit;
 .btn{
    display:block;
    position: relative;
-   margin:0 auto; // отцентрирует блок по центру родительского элемента
+   margin:0 auto;
     }
 
 
