@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from sports_matches.models import MatchResults, StatsWinAllTeamNBA
+from sports_matches.models import MatchResults, StatsWinAllTeamNBA, TeamsNBA
 
 
 class MatchResultsSerializer(ModelSerializer):
@@ -30,3 +30,9 @@ class StatsWinAllTeamNBASerializer(ModelSerializer):
             'win_team_two_guest',
             'win_team_two_home',
         )
+
+
+class TeamsNBASerializer(ModelSerializer):
+    class Meta:
+        model = TeamsNBA
+        fields = '__all__'

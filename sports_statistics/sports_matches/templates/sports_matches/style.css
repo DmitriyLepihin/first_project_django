@@ -1,0 +1,42 @@
+body {
+    background: url(images/logo_web.jpg) 0 0/100% auto no-repeat;
+   }
+
+label {
+color: #FAFAD2;
+font-family: Arial;
+font-weight: 600;
+    }
+
+h2 {
+color: #FAFAD2;
+font-family: Arial;
+font-size: 50px;
+font-weight: 700;
+    }
+
+.my-0 {
+color: #696969;
+font-family: Arial;
+    }
+
+.text-muted{
+font-weight: 800;
+color: Black
+    }
+
+
+.lead{
+color: #FAFAD2;
+font-family: inherit;
+    }
+
+.btn{
+   display:block;
+   position: relative;
+   margin:0 auto; // отцентрирует блок по центру родительского элемента
+    }
+
+
+
+

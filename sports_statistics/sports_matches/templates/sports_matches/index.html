@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+     <link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body class="bg-light">
+<div class="container">
+    <div class="row">
+        <div class="col py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="https://pngimg.com/uploads/nba/nba_PNG8.png" alt="" width="150"
+                 height="150">
+            <h2>Статистика личных встреч команд NBA</h2>
+            <p class="lead">c сезона 80/81г.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <form class="needs-validation">
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <label for="state">Выбери первую команду</label>
+                        <select class="custom-select" id="command-1" required="">
+                            <option value="" selected="selected">Команда...</option>
+                        </select>
+                                <div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <label for="state">Выбери вторую команду</label>
+                        <select class="custom-select" id="command-2" required="">
+                            <option value="" selected="selected">Команда...</option>
+                        </select>
+                        <p></p>
+                        <div class="row">
+                            <div class="col">
+                                <ul class="list-group mb-3">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Команда: </h6>
+                                        </div>
+                                        <span class="text-muted" id="team-name-two"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Побед: </h6>
+                                        </div>
+                                        <span class="text-muted" id="win-team-two"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Процент побед: </h6>
+                                        </div>
+                                        <span class="text-muted" id="percent-win-two"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Побед дома: </h6>
+                                        </div>
+                                        <span class="text-muted" id="win-home-two"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Побед в гостях: </h6>
+                                        </div>
+                                        <span class="text-muted" id="win-guest-two"> </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <ul class="list-group mb-3">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Команда: </h6>
+                                        </div>
+                                        <span class="text-muted" id="team-name-one"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Побед: </h6>
+                                        </div>
+                                        <span class="text-muted" id="win-team-one"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Процент побед: </h6>
+                                        </div>
+                                        <span class="text-muted" id="percent-win-one"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Побед дома: </h6>
+                                        </div>
+                                        <span class="text-muted" id="win-home-one"> </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">Побед в гостях: </h6>
+                                        </div>
+                                        <span class="text-muted" id="win-guest-one"> </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <button class="btn btn-primary" id="find" type="button">Отправить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+async function getResponse(){
+    var select1 = document.getElementById("command-1")
+    var select2 = document.getElementById("command-2")
+    var response = await fetch("http://127.0.0.1:8000/api/teams/")
+    var content = await response.json()
+    var key;
+    for (key in content){
+       select1.innerHTML +=  '<option value="' + content[key].team_name + '">' + content[key].team_name + '</option>'
+       select2.innerHTML += '<option value="' + content[key].team_name + '">' + content[key].team_name + '</option>'
+    }
+}
+
+getResponse()
+
+function get_json(){
+    var team1 = $("#command-1").val()
+    var team2 = $("#command-2").val()
+    $.ajax({
+        dataType: "json",
+        url: "http://127.0.0.1:8000/api/all_teams_matches/?team1=" + team1 + "&" + "team2=" + team2
+        }).done(function ( data ) {
+            console.log(data)
+            var win_one = document.getElementById("win-team-one")
+            var win_two = document.getElementById("win-team-two")
+            var percent_one = document.getElementById("percent-win-one")
+            var percent_two = document.getElementById("percent-win-two")
+            var win_home_one = document.getElementById("win-home-one")
+            var win_home_two = document.getElementById("win-home-two")
+            var win_guest_one = document.getElementById("win-guest-one")
+            var win_guest_two = document.getElementById("win-guest-two")
+            var team_name_one = document.getElementById("team-name-one")
+            var team_name_two = document.getElementById("team-name-two")
+            var text = document.getElementById("all-games")
+            win_one.innerHTML = data.win_team_one
+            win_two.innerHTML = data.win_team_two
+            percent_one.innerHTML = data.win_percent_team_one + '%'
+            percent_two.innerHTML = data.win_percent_team_two + '%'
+<!--            text.innerHTML = (data.win_team_one + data.win_team_two)-->
+            win_guest_one.innerHTML = data.win_team_one_guest
+            win_home_one.innerHTML = data.win_team_one_home
+            win_guest_two.innerHTML = data.win_team_two_guest
+            win_home_two.innerHTML = data.win_team_two_home
+            team_name_one.innerHTML = data.team_one
+            team_name_two.innerHTML = data.team_two
+    })
+}
+
+
+
+var value = document.getElementById("find")
+value.addEventListener("click", get_json, false)
+
+
+</script>
+
+
+</body>
+
+</html>

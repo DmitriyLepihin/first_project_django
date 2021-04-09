@@ -6,6 +6,8 @@ from django.core.management import BaseCommand
 from sports_matches.models import MatchResults, StatsWinAllTeamNBA
 from datetime import datetime, timedelta
 
+from time import sleep
+
 DATE_START_APP = datetime.strptime('Feb 15, 2021', '%b %d, %Y').date()
 
 DATE_CHANGES = datetime.strptime('Oct 31, 2000', '%b %d, %Y').date()
@@ -24,6 +26,8 @@ CHECK_DATE = DATE_NOW - timedelta(1)
 
 YEAR_START = 1981
 YEAR_FINISH = 2022
+
+DATETIME_START_SCRAP = datetime(2021, 4, 9, 16, 30, 0)
 
 URL_BR = 'https://www.basketball-reference.com/leagues/NBA_'
 
@@ -46,10 +50,15 @@ class Command(BaseCommand):
     }
 
     def handle(self, *args, **options):
-        if DATE_NOW > DATE_START_APP:
-            self.parse_last_matches_updates()
-        else:
-            self.parse()
+        global DATETIME_START_SCRAP
+        while True:
+            if datetime.now() > DATETIME_START_SCRAP:
+                if DATE_NOW > DATE_START_APP:
+                    self.parse_last_matches_updates()
+                    DATETIME_START_SCRAP += timedelta(hours=24)
+                else:
+                    self.parse()
+            sleep(18000)
 
     def get_html(self, url):
         res = requests.get(url)

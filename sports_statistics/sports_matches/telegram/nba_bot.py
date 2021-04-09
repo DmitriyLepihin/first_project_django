@@ -15,11 +15,11 @@ TEAM_NBA = [
 ]
 
 MSG_GREETING = 'Добро пожаловать в чат-бот который\n\
-покажет статистику личных встреч команд NBA ??\n\n??Выбери две команды в меню?'
+покажет статистику личных встреч команд NBA 🏀\n\n⬇️Выбери две команды в меню ⬇️'
 
 URL_BR = 'https://www.basketball-reference.com'
 
-MSG_URL = 'Еще больше информации о баскетболе можно получить перейдя по ссылке ?'
+MSG_URL = 'Еще больше информации о баскетболе можно получить перейдя по ссылке ⬇'
 
 MSG_ALL_GAMES = 'Всего проведено:'
 
@@ -39,8 +39,8 @@ with open('token.json', 'r') as file:
 
 @bot.message_handler(func=lambda m: True)
 def start_bot(message):
-    user_kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    user_kb.row('start', 'exit')
+    user_kb = types.ReplyKeyboardMarkup(True)
+    user_kb.row('start', 'exit').add()
     if message.text == 'start':
         key = keyboa_maker(items=TEAM_NBA, copy_text_to_callback=True, items_in_row=3)
         bot.send_message(message.from_user.id, reply_markup=key, text=MSG_GREETING)
@@ -61,7 +61,6 @@ def callback_walker(call):
         sort_teams = sorted(teams)
         req = requests.get(f'http://127.0.0.1:8000/api/all_teams_matches/?team1={sort_teams[0]}&team2={sort_teams[1]}')
         res = json.loads(req.text)
-        print(res)
         all_match = res['win_team_one'] + res['win_team_two']
         result = f"{MSG_ALL_GAMES} {all_match} игр\n\n{res['team_one']} {MSG_WIN} {res['win_team_one']}\n\
 {MSG_WIN_GUEST} {res['win_team_one_guest']}\n{MSG_WIN_HOME} {res['win_team_one_home']}\n{MSG_PERCENT_WIN}\
@@ -72,4 +71,5 @@ def callback_walker(call):
         bot.send_message(call.message.chat.id, result)
 
 
-bot.polling()
+if __name__ == "__main__":
+    bot.polling()

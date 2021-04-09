@@ -17,11 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from sports_matches.views import MatchResultsViewSet, StatsWinAllTeamNBAViewSet
+from sports_matches.views import MatchResultsViewSet, StatsWinAllTeamNBAViewSet, TeamsNBAViewSet
 
 router = SimpleRouter()
 router.register('api/all_teams_matches', StatsWinAllTeamNBAViewSet)
 router.register('api/res_match', MatchResultsViewSet)
+router.register('api/teams', TeamsNBAViewSet)
 
 
 urlpatterns = [

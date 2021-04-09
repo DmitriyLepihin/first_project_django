@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK
 from rest_framework.viewsets import ModelViewSet
 
-from sports_matches.models import MatchResults, StatsWinAllTeamNBA
-from sports_matches.serializers import MatchResultsSerializer, StatsWinAllTeamNBASerializer
+from sports_matches.models import MatchResults, StatsWinAllTeamNBA, TeamsNBA
+from sports_matches.serializers import MatchResultsSerializer, StatsWinAllTeamNBASerializer, TeamsNBASerializer
 from datetime import datetime
 
 
@@ -41,3 +41,8 @@ class StatsWinAllTeamNBAViewSet(ModelViewSet):
         result = self.queryset.get(team_one=sort_team[0], team_two=sort_team[1])
         serializer = self.serializer_class(result)
         return Response(data=serializer.data, status=HTTP_200_OK)
+
+
+class TeamsNBAViewSet(ModelViewSet):
+    queryset = TeamsNBA.objects.all()
+    serializer_class = TeamsNBASerializer
