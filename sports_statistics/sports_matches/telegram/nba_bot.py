@@ -41,6 +41,7 @@ with open('token.json', 'r') as file:
 def start_bot(message):
     user_kb = types.ReplyKeyboardMarkup(True)
     user_kb.row('start', 'exit').add()
+    bot.send_message(message.from_user.id, reply_markup=user_kb, text='⛹️‍♂️⛹️‍♀️')
     if message.text == 'start':
         key = keyboa_maker(items=TEAM_NBA, copy_text_to_callback=True, items_in_row=3)
         bot.send_message(message.from_user.id, reply_markup=key, text=MSG_GREETING)
